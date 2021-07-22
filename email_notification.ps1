@@ -19,7 +19,7 @@ $size = (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Mediu
 
 while(1) {
 
-    Start-Sleep -s 60
+    Start-Sleep -s 90
     
     if($size -eq (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Medium_Data.csv").length) {
 
