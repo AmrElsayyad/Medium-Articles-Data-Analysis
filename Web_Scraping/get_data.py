@@ -9,6 +9,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 import nltk
 import random
 import time
+from urllib3.exceptions import MaxRetryError
 
 # Downloading punctuation package for nltk
 nltk.download('punkt')
@@ -125,6 +126,7 @@ for URL in URLs_df['URL'][last_row:]:
                     # If this element is not found, then probably the page is not found
                     # Quit the browser and skip this page
                     browser.quit()
+                    failed = False
                     break
             else:
                 # If there's a publication, use this xpath to find the writer
@@ -322,10 +324,17 @@ for URL in URLs_df['URL'][last_row:]:
             # Resetting wait_time, in case it was changed by the "StaleElementReferenceException"
             wait_time = 1
 
+            # Printing URL number
+            print(URLs_df[URLs_df['URL'] == URL].index[0])
+
         except StaleElementReferenceException:
             # In case of an error in loading
             failed = True
             wait_time = 5
+
+        except MaxRetryError:
+            # In this case the page is probably not found
+            failed = False
 
         finally:
             # Write DataFrame to csv file
