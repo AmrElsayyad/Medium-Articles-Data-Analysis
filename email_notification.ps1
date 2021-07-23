@@ -4,8 +4,8 @@ $credentials = Get-Credential -Message "Enter your outlook email credentials:"
 # Email parameters used for the startup email
 $TestParams = @{
 
-    From = "$((gwmi Win32_ComputerSystem).Model) <$($credential.UserName)>"
-    To = "You <$($credential.UserName)>"
+    From = "$((gwmi Win32_ComputerSystem).Model) <$($credentials.UserName)>"
+    To = "You <$($credentials.UserName)>"
     Subject = 'Notification Service Started'
     Body = "`nEmail notification service on $((gwmi Win32_ComputerSystem).Model) has started.`n`nTime: $(Get-Date)`n"
     SMTPServer = 'smtp-mail.outlook.com'
@@ -32,8 +32,8 @@ while(1) {
                     
         $MailParams = @{
 
-            From = "$((gwmi Win32_ComputerSystem).Model) <$($credential.UserName)>"
-            To = "You <$($credential.UserName)>"
+            From = "$((gwmi Win32_ComputerSystem).Model) <$($credentials.UserName)>"
+            To = "You <$($credentials.UserName)>"
             Subject = 'Data Collection Ended'
             Body = "`nData collection on $((gwmi Win32_ComputerSystem).Model) has ended.`n`nTime: $(Get-Date)`n"
             SMTPServer = 'smtp-mail.outlook.com'
