@@ -45,4 +45,4 @@ URLs = pd.Series(browser.find_elements_by_xpath("//a[@class = 'text-dark']")).ap
 
 # Creating a dataframe and exporting to csv file
 df = pd.DataFrame({'URL': URLs})
-df.to_csv("Medium_URLs.csv")
+df.to_csv("Medium_URLs.csv", index=False)
