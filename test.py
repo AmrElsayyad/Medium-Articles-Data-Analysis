@@ -56,7 +56,7 @@ for i in range(0, len(proxies)):
         """
         Choose URL here
         """
-        browser.get(URLs_df['URL'][0])
+        browser.get(URLs_df['URL'][4018])
         time.sleep(wait_time)
         break
     except WebDriverException:
@@ -77,30 +77,34 @@ except NoSuchElementException:
 
 # Getting date and read time
 
+# Getting Publication
+
+try:
+    publication = browser.find_element_by_xpath(
+        "//*[@id='root']/div/div[3]/div[5]/div/div[2]/div[1]/div/div/div[1]/div[3]/span/span/div/div/h2/a"
+    ).text
+except NoSuchElementException:
+    publication = ''
+
+# Getting Writer
+
 if publication == '':
-    # If there's no publication
-    paragraphs = browser.find_elements_by_tag_name('p')
-    for p in paragraphs:
-        if p.text.__contains__(" min read"):
-            date_and_time = p.text.split("·")
-            date = date_and_time[0]
-            read_time = int(date_and_time[1].replace(" min read", ""))
-
+    # If there's no publication, use this xpath to find the writer
+    try:
+        writer = browser.find_element_by_xpath(
+            "//*[@id='root']/div/div[3]/div[5]/div/div[2]/div[2]/div/div/div/div[1]/h2/a"
+        ).text.replace("More from ", "")
+    except NoSuchElementException:
+        # If this element is not found, then probably the page is not found
+        # Quit the browser and skip this page
+        browser.quit()
+        print("The page was not found")
 else:
-    # If there's a publication
-
-    divs = browser.find_elements_by_tag_name('div')
-
-    for div in divs:
-        if div.text.__contains__(" min read"):
-            div_text = div.text.split("\n")
-            for txt in div_text:
-                if txt.__contains__(" min read"):
-                    date_and_time = txt.split(" · ")
-                    date = date_and_time[0]
-                    read_time = int(date_and_time[1].replace(" min read", ""))
-                    break
-            break
+    # If there's a publication, use this xpath to find the writer
+    writer = browser.find_element_by_xpath(
+        "//*[@id='root']/div/div[3]/div[5]/div/div[2]/div[1]/div/div/div[1]/div[1]/"
+        "span/span/div[2]/div/h2/a"
+    ).text
 
 """
 Don't forget to quit the browser
