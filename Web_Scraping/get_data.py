@@ -15,8 +15,9 @@ from urllib3.exceptions import MaxRetryError
 nltk.download('punkt')
 
 # Defining needed variables
-wait_time = 1               # Time for page to load
+last_row = 0                # Last row in the URLs DataFrame that was collected
 browser = webdriver         # Initializing webdriver
+wait_time = 1               # Time for page to load
 URL = str()                 # Article URL
 title = str()               # Title text
 head_image = str()          # Header image link
@@ -60,19 +61,20 @@ def text_to_num(txt):
     return float(txt) * multiplier
 
 
-# Reading the data csv file
+# Reading the URLs csv file
 URLs_df = pd.read_csv("Medium_URLs.csv")
 
 # Read DataFrame if it exists
 try:
     data_df = pd.read_csv("../Medium_Data.csv")
+    title_with_dash = '-'.join(data_df['Title'].iloc[-1].split(' '))
+    last_row = URLs_df[URLs_df['URL'].apply(lambda txt: txt.__contains__(title_with_dash))].index[0] + 1
 except FileNotFoundError:
     # Create a new one if it doesn't
     data_df = pd.DataFrame(
         columns=['URL', 'Title', 'Image', 'Images_num', 'h1_num', 'h2_num', 'Paragraphs_num',
                  'Paragraphs_Word_Count_avg', 'Quotes_num', 'Publication', 'Writer',
                  'Date', 'Read_Time', 'Claps', 'Responses'])
-last_row = len(data_df)
 
 # Get the proxies list
 proxies = pd.read_csv("proxies.csv")["Proxy"]
@@ -243,7 +245,7 @@ for URL in URLs_df['URL'][last_row:]:
                 # If there's no publication
 
                 for p in paragraphs:
-                    if p.text.__contains__(" min read"):
+                    if p.text.__contains__(", 20") and p.text.__contains__(" min read"):
                         date_and_time = p.text.split("·")
                         date = date_and_time[0]
                         read_time = int(date_and_time[1].replace(" min read", ""))
