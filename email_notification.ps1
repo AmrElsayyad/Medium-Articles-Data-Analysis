@@ -1,5 +1,7 @@
-﻿$credential = Get-Credential -Message "Enter your outlook email credentials:"
+﻿# Getting Outlook Credentials used for sending and recieving emails
+$credentials = Get-Credential -Message "Enter your outlook email credentials:"
 
+# Email parameters used for the startup email
 $TestParams = @{
 
     From = "$((gwmi Win32_ComputerSystem).Model) <$($credential.UserName)>"
@@ -9,18 +11,22 @@ $TestParams = @{
     SMTPServer = 'smtp-mail.outlook.com'
     Port = 587
     UseSsl = $true
-    Credential = $credential
+    Credential = $credentials
 
 }
 
+# Sending Startup email
 Send-MailMessage @TestParams -ErrorAction Stop
 
+# Getting the size of "Medium_DAta.csv" file
 $size = (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Medium_Data.csv").length
 
 while(1) {
-
-    Start-Sleep -s 90
     
+    # Waiting for a certain amount of time.
+    Start-Sleep -s 180
+    
+    # Checking if the data collection is done, by comparing the file size periodically.
     if($size -eq (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Medium_Data.csv").length) {
 
                     
@@ -33,7 +39,7 @@ while(1) {
             SMTPServer = 'smtp-mail.outlook.com'
             Port = 587
             UseSsl = $true
-            Credential = $credential
+            Credential = $credentials
 
         }
 
@@ -43,6 +49,7 @@ while(1) {
             
     } else {
 
+        # If the size has changed, then update the size for the next iteration comparison.
         $size = (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Medium_Data.csv").length
 
     }
