@@ -58,7 +58,7 @@ for i in range(0, len(proxies)):
         """
         Choose URL here
         """
-        browser.get(URLs_df['URL'][4674])
+        browser.get(URLs_df['URL'][6958])
         time.sleep(wait_time)
         break
     except WebDriverException:
@@ -91,172 +91,6 @@ def text_to_num(txt):
     return float(txt) * multiplier
 
 
-"""
-Getting publication and writer
-"""
-
-# Getting Publication
-
-try:
-    publication = browser.find_element_by_xpath(
-        "//*[@id='root']/div/div[3]/div[5]/div/div[2]/div[1]/div/div/div[1]/div[3]/span/span/div/div/h2/a"
-    ).text
-except NoSuchElementException:
-    publication = ''
-
-# Getting Writer
-
-if publication == '':
-    # If there's no publication, use this xpath to find the writer
-    try:
-        writer = browser.find_element_by_xpath(
-            "//*[@id='root']/div/div[3]/div[5]/div/div[2]/div[2]/div/div/div/div[1]/h2/a"
-        ).text.replace("More from ", "")
-    except NoSuchElementException:
-        # If this element is not found, then probably the page is not found
-        # Quit the browser and skip this page
-        browser.quit()
-        print("Failed to retrieve writer")
-else:
-    # If there's a publication, use this xpath to find the writer
-    writer = browser.find_element_by_xpath(
-        "//*[@id='root']/div/div[3]/div[5]/div/div[2]/div[1]/div/div/div[1]/div[1]/"
-        "span/span/div[2]/div/h2/a"
-    ).text
-
-"""
-Getting images
-"""
-
-# Getting number of images
-figures = browser.find_elements_by_xpath("//figure[contains(@class, paragraph-image)]")
-images_num = len(figures)
-
-# Getting the header image
-head_image = ''
-if len(figures) > 0:
-    try:
-        img = figures[0].find_element_by_tag_name('img')
-        # Check if the image is a valid header image by checking the size
-        if int(img.get_attribute('width')) > 650:
-            head_image = img.get_attribute('src')
-    except NoSuchElementException:
-        head_image = ''
-
-"""
-Getting the title
-
-1- Split the URL, and get the last piece
-2- Split that and leave the code at the end
-3- Join all the words together with space in between
-"""
-
-title = " ".join(browser.current_url.split('/')[-1].split('-')[:-1])
-
-"""
-Getting the headers
-"""
-
-try:
-    # Getting number of h1 elements
-    h1_num = len(browser.find_elements_by_tag_name('h1'))
-except NoSuchElementException:
-    h1_num = 0
-
-# Getting h2 elements
-h2s = browser.find_elements_by_tag_name('h2')
-
-# Filter h2 elements
-for i in range(len(h2s)):
-    if h2s[i].text != '':
-        h2s = h2s[i + 1:]
-        break
-
-# Getting number of h2 elements
-h2_num = 0
-for h2 in h2s:
-    if h2.text == '':
-        # The last h2 element is followed by an empty one
-        break
-    else:
-        h2_num += 1
-
-"""
-Getting paragraphs
-"""
-
-# Getting all paragraph elements
-paragraphs = browser.find_elements_by_tag_name('p')
-
-# Filter paragraphs
-for i in range(len(paragraphs)):
-    if paragraphs[i].text == 'Top highlight':
-        paragraphs = paragraphs[i + 1:]
-        break
-# If 'Top highlights' wasn't found then start with the nearest not empty paragraph
-for i in range(len(paragraphs)):
-    if paragraphs[i].text == '':
-        continue
-    else:
-        paragraphs = paragraphs[i:]
-        break
-
-# Initializing Number of Paragraphs with 0
-p_num = 0
-
-# Getting average paragraphs' word count
-p_word_count_list = list()
-for p in paragraphs:
-    if p.text == '':
-        # The last paragraph is followed by an empty one
-        break
-    else:
-        p_num += 1
-        p_word_count_list.append(len(nltk.word_tokenize(p.text)))
-p_word_count_avg = int(np.round(np.mean(p_word_count_list)))
-
-"""
-Getting number of quotes
-"""
-
-try:
-    quotes_num = len(browser.find_elements_by_tag_name('blockquote'))
-except NoSuchElementException:
-    quotes_num = 0
-
-"""
-Getting date and read time
-"""
-
-if publication == '':
-    # If there's no publication
-
-    for p in paragraphs:
-        if p.text.__contains__(", 20") and p.text.__contains__(" min read"):
-            date_and_time = p.text.split("·")
-            date = date_and_time[0]
-            read_time = int(date_and_time[1].replace(" min read", ""))
-
-else:
-    # If there's a publication
-
-    divs = browser.find_elements_by_tag_name('div')
-
-    for div in divs:
-        if div.text.__contains__(" min read"):
-            div_text = div.text.split("\n")
-            for text in div_text:
-                if text.__contains__(" min read"):
-                    date_and_time = text.split(" · ")
-                    date = date_and_time[0]
-                    read_time = int(date_and_time[1].replace(" min read", ""))
-                    break
-            break
-
-"""
-Getting claps and responses
-"""
-
 # Getting all the buttons
 buttons = browser.find_elements_by_tag_name('button')
 
@@ -283,15 +117,6 @@ for i in range(len(buttons)):
 
         # Break the loop, no need to continue
         break
-
-"""
-Appending to DataFrame and quitting the browser
-"""
-
-# Appending to DataFrame
-data_df.loc[len(data_df.index)] = \
-    [browser.current_url, title, head_image, images_num, h1_num, h2_num, p_num, p_word_count_avg,
-     quotes_num, publication, writer, date, read_time, claps, responses]
 
 """
 Don't forget to quit the browser
