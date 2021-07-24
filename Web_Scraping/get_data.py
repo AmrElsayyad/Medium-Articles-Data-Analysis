@@ -1,15 +1,15 @@
 # Importing necessary libraries
-import numpy as np
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
-import nltk
+from urllib3.exceptions import MaxRetryError
+import pandas as pd
+import numpy as np
 import random
 import time
-from urllib3.exceptions import MaxRetryError
+import nltk
 
 # Downloading punctuation package for nltk
 nltk.download('punkt')
@@ -33,8 +33,6 @@ date = str()                # Date of the article
 read_time = int()           # Estimated read time of the article in minutes
 claps = int()               # Number of claps
 responses = int()           # Number of responses
-page_counter = 0            # Counter to count how many page has been scraped
-page_counter_limit = 10     # How many pages to be written each time
 
 # Defining needed functions
 
@@ -305,16 +303,6 @@ for URL in URLs_df['URL'][last_row:]:
             data_df.loc[len(data_df.index)] = \
                 [browser.current_url, title, head_image, images_num, h1_num, h2_num, p_num, p_word_count_avg,
                  quotes_num, publication, writer, date, read_time, claps, responses]
-
-            # Quitting the browser
-            browser.quit()
-
-            # Increase page counter and if limit is reached write to csv
-            page_counter += 1
-            if page_counter == page_counter_limit:
-                page_counter = 0  # Reset counter
-                if data_df.shape[0] > 0:
-                    data_df.to_csv("../Medium_Data.csv", index=False)
 
             """
             Success
