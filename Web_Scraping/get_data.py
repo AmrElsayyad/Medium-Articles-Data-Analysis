@@ -279,18 +279,14 @@ for URL in URLs_df['URL'][last_row:]:
                     and the next one is the responses.
                     """
                     # Getting claps
-                    claps_str = int(text_to_num(buttons[i].text))
-                    if claps_str == '':
-                        claps = 0
-                    else:
-                        claps = int(claps_str)
+                    claps = int(text_to_num(buttons[i].text))
 
                     # Getting responses
-                    responses_str = int(text_to_num(buttons[i + 1].text))
-                    if responses_str == '':
+                    try:
+                        responses = int(text_to_num(buttons[i + 1].text))
+                    except IndexError:
+                        # In case of no responses
                         responses = 0
-                    else:
-                        responses = int(responses_str)
 
                     # Break the loop, no need to continue
                     break
