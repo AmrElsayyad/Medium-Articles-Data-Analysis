@@ -325,6 +325,6 @@ for URL in URLs_df['URL'][last_row:]:
         finally:
             # Write DataFrame to csv file
             if data_df.shape[0] > 0:
-                data_df.to_csv("../Medium_Data.csv", index=False)
+                data_df.to_csv(path_or_buf="../Medium_Data.csv", index=False)
             # Quit browser
             browser.quit()
