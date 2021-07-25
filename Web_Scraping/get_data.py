@@ -282,9 +282,13 @@ for URL in URLs_df['URL'][last_row:]:
                     claps = int(text_to_num(buttons[i].text))
 
                     # Getting responses
-                    try:
-                        responses = int(text_to_num(buttons[i + 1].text))
-                    except IndexError:
+                    if any(char.isdigit() for char in buttons[i + 1].text):
+                        try:
+                            responses = int(text_to_num(buttons[i + 1].text))
+                        except IndexError:
+                            # In case of no responses
+                            responses = 0
+                    else:
                         # In case of no responses
                         responses = 0
 
