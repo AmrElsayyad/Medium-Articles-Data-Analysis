@@ -24,7 +24,7 @@ $size = (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Mediu
 while(1) {
     
     # Waiting for a certain amount of time.
-    Start-Sleep -s 180
+    Start-Sleep -s 300
     
     # Checking if the data collection is done, by comparing the file size periodically.
     if($size -eq (Get-Item "$($HOME)\Documents\GitHub\Medium-Articles-Data-Analysis\Medium_Data.csv").length) {
