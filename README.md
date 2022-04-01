@@ -24,6 +24,7 @@ Then make sure to install the following libraries:
 * Matplotlib
 * Seaborn
 * JupyterLab
+
 Additionally, if you want to use the webscraping library you will need the following:
 * [Firefox](https://www.mozilla.org/en-US/firefox/new/)
 * VPN (Here is what I used: [ProtonVPN](https://protonvpn.com/download))
