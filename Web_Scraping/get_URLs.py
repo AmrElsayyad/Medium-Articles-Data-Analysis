@@ -1,15 +1,16 @@
 # importing necessary libraries
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import time
 import pandas as pd
 
 # Defining needed variables
-pause_time = 3      # time needed for page to load (in seconds)
+pause_time = 3  # time needed for page to load (in seconds)
 
 # Getting the page
 browser = webdriver.Firefox()
-URL = 'https://datantify.com/lab/trendbar/'
+URL = "https://datantify.com/lab/trendbar/"
 page = browser.get(URL)
 time.sleep(pause_time)
 pause_time = 1
@@ -18,7 +19,7 @@ pause_time = 1
 Scrolling down until the page stops loading any more data
 """
 
-body = browser.find_element_by_tag_name('body')
+body = browser.find_element(by=By.TAG_NAME, value="body")
 last_height = 0
 
 # Check if the page stopped loading any more data
@@ -37,12 +38,14 @@ def href(element):
     """
     A function that returns the href of an element
     """
-    return element.get_attribute('href')
+    return element.get_attribute("href")
 
 
 # Getting all the URLs in the page
-URLs = pd.Series(browser.find_elements_by_xpath("//a[@class = 'text-dark']")).apply(href)
+URLs = pd.Series(browser.find_elements_by_xpath("//a[@class = 'text-dark']")).apply(
+    href
+)
 
 # Creating a dataframe and exporting to csv file
-df = pd.DataFrame({'URL': URLs})
+df = pd.DataFrame({"URL": URLs})
 df.to_csv("Medium_URLs.csv", index=False)
