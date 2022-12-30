@@ -5,16 +5,12 @@
 0. [Status](#status)
 1. [Installation](#installation)
 2. [Project Motivation](#motivation)
-3. [File Descriptions](#files)
-4. [How to Use Jupyter Notebooks](#HowToUse)
-5. [Results](#results)
-6. [Licensing, Authors, and Acknowledgements](#licensing)
 
-## Status <a name="status"></a>
+## Status <a id="status"></a>
 
 Project is not yet deployed.
 
-## Installation <a name="installation"></a>
+## Installation <a id="installation"></a>
 
 You need to have [Python](https://www.python.org/downloads/) (>= 3.9) installed.
 Then make sure to install the following libraries:
@@ -31,7 +27,7 @@ Additionally, if you want to use the webscraping library you will need the follo
 * Selenium (Python Package)
 * [Geckodriver](https://github.com/mozilla/geckodriver/releases) extracted in [Python directory](file://%userprofile%\AppData\Local\Programs\Python\Python39).
 
-## Project Motivation<a name="motivation"></a>
+## Project Motivation<a id="motivation"></a>
 
 I was thinking to start writing on [Medium](https://medium.com/), but as I always have been, I was afraid of failure. So, I started doing what I always do in this situation, make a plan.
 
@@ -68,27 +64,4 @@ So, I started following [CRISP-SM](https://www.datascience-pm.com/crisp-dm-2/):
 4. Modeling
 5. Evaluation
 6. Deployment
-
-## File Descriptions <a name="files"></a>
-
-
-
-## How to Use Jupyter Notebooks <a name="HowToUse"></a>
-
-1. Clone the project to your local machine.
-2. Open the project folder.
-3. In the address bar, type `cmd` then press Enter.
-4. In the Command window type `jupyter notebook` then press enter.
-
-Now you should have jupyter running in your default browser, you can now explore the notebooks.
-
-**Note:**	You have to keep the cmd window open, in order to keep the jupyter session running.
-
-## Results<a name="results"></a>
-
-The main findings of the code can be found at the post available [here]().
-
-## Licensing, Authors, Acknowledgements<a name="licensing"></a>
-
-LICENSE file is included in the main files.
 
